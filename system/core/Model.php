@@ -72,5 +72,24 @@ class CI_Model {
 		//	most likely a typo in your model code.
 		return get_instance()->$key;
 	}
+	
+	public function update($table,$params,$where)
+    {
+        $this->db->set($params);
+        $this->db->where($where);
+        return $this->db->update($table);
+	}
+	
+    public function delete($table,$where)
+    {
+        
+        $this->db->where($where);
+        return $this->db->delete($table);
+	}
+	
+    public function insert($table,$params)
+    {
+        return $this->db->insert($table,$params);
+    }
 
 }

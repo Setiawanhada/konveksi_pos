@@ -30,7 +30,7 @@
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-        <i class="fas fa-database"></i>
+        <i class="fas fa-database text-gray-400"></i>
         <span>Master</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -42,9 +42,14 @@
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-        <i class="fas fa-clipboard-list"></i>
+        <a class="nav-link" href="">
+        <i class="fas fa-clipboard-list text-gray-400"></i>
         <span>Pesanan</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="">
+        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+        <span>Logout</span></a>
     </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
