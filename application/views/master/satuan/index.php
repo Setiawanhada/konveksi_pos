@@ -3,11 +3,23 @@
 
 <!-- Page Heading -->
 <h1 class="h3 mb-2 text-gray-800">Master Satuan</h1>
-
+<div>
+<!-- load notif templates -->
+<?php $this->load->view('template/notification') ?>
+<!-- end load notif -->
+</div>
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
 <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Data Satuan</h6>
+    <div class="row d-flex justify-content-between">
+        <div>
+            <h6 class="m-0 font-weight-bold text-primary">Data Satuan</h6>
+        </div>
+        <div></div>
+        <div>
+            <a href="<?=site_url('master/satuan/add')?>" class="btn btn-sm btn-primary">Tambah Data</a>
+        </div>
+    </div>
 </div>
 <div class="card-body">
     <div class="table-responsive">

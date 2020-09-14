@@ -3,9 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Satuan extends CI_Controller {
     public function __construct()
     {
-        parent::__construct();
-        // $this->load->model("admin/M_informasi");
-		// $this->load->helper('tgl_indo');
+		parent::__construct();
+		$this->load->library('form_validation');
+        $this->load->model("master/M_satuan");
+		$this->load->helper('tgl_indo');
 		
 	}
 
@@ -28,51 +29,36 @@ class Satuan extends CI_Controller {
         
     }
     
-    // public function add()
-	// {
-    //     // load view
-	// 	$this->load->view('admin/dashboard/head');
-	// 	$this->load->view('admin/dashboard/sidebar');
-	// 	$this->load->view('admin/informasi/add');
-	// 	$this->load->view('admin/dashboard/footer');
-    // }
+    public function add()
+	{
+        // load view
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar');
+		$this->load->view('master/satuan/add');
+		$this->load->view('template/footer');
+    }
 	
-    // public function add_process()
-	// {
-	// 	$judul = $this->input->post('judul', true);
-    //     $isi = $this->input->post('isi', true);
-        
-	// 	$number = mt_rand(100, 999);
-	// 	$prefix = 'IF';
-	// 	$generateId = $prefix.$number.date('Ymd');
-	// 	$fileExt = pathinfo($_FILES["gambar"]["name"], PATHINFO_EXTENSION);
-	// 	$gambar = $generateId.'.'.$fileExt;
-	// 	if(!empty($_FILES["gambar"]["name"])){
-	// 		//set params
-	// 		$params = array(
-	// 			'kode_info' => $generateId,
-	// 			'judul' => $judul,
-	// 			'gambar'	=> $gambar,
-	// 			'isi'   => $isi,
-	// 			'tanggal'   => date('Y-m-d')
-	// 		);
-	// 	}
-	// 	else{
-	// 		//set params
-	// 		$params = array(
-	// 			'kode_info' => $generateId,
-	// 			'judul' => $judul,
-	// 			'isi'   => $isi,
-	// 			'tanggal'   => date('Y-m-d')
-	// 		);
-	// 	}
+    public function add_process()
+	{
+        $nama_satuan = $this->input->post('nama_satuan', true);
 		
-	// 	$this->_uploadImage($generateId);
-    //     $this->M_informasi->insert_informasi($params);
+		$this->form_validation->set_rules('nama_satuan','Nama Satuan','required');
+
+		if($this->form_validation->run() == false){
+			// redirect('master/satuan/add');
+		}else{
+			//set params
+			$params = array(
+				'nama_satuan' 	=> $nama_satuan,
+				'create_date'   => date('Y-m-d')
+			);
+			print_r($paams);die;
 		
-	// 	$this->notif_msg('admin/informasi/add', 'Sukses', 'Data berhasil ditambahkan');
-        
-	// }
+        $this->M_satuan->insert($params);
+		
+		$this->notif_msg('master/satuan/add', 'Sukses', 'Data berhasil ditambahkan');
+		}
+	}
 	
 	// public function delete($kode_info)
 	// {

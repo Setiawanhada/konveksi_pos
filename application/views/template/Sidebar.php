@@ -35,19 +35,19 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="">Satuan</a>
-            <a class="collapse-item" href="">Bahan</a>
-            <a class="collapse-item" href="">Jenis</a>
+            <a class="collapse-item" href="<?= site_url('master/satuan')?>">Satuan</a>
+            <a class="collapse-item" href="<?= site_url('master/bahan')?>">Bahan</a>
+            <a class="collapse-item" href="<?= site_url('master/jenis')?>">Jenis</a>
         </div>
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="<?= site_url('master/pesanan')?>">
         <i class="fas fa-clipboard-list text-gray-400"></i>
         <span>Pesanan</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="<?= site_url('login/logout')?>">
         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
         <span>Logout</span></a>
     </li>
