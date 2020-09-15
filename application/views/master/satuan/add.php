@@ -15,7 +15,7 @@
 </div>
 <div class="card-body">
     <div class="">
-        <form action="<?=site_url('master/satuan/add_process')?>">
+        <form action="<?=site_url('master/satuan/add_process')?>" method="post">
             <div class="form-group row">
                 <label for="staticEmail" class="col-sm-2 col-form-label">Nama Satuan</label>
                 <div class="col-sm-10">
@@ -24,7 +24,7 @@
                 
             </div>
             <div class="row d-flex justify-content-center">
-                    <div></div>
+                    <div><a href="<?=site_url('master/satuan')?>" class="btn btn-sm btn-warning">kembali</a></div>
                     <div><button type="submit" class="btn-sm btn-success">Simpan</button></div>
                     <div></div>
                 </div>

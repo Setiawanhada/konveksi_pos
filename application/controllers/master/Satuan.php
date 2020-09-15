@@ -13,7 +13,7 @@ class Satuan extends CI_Controller {
 	public function index()
 	{
         // load view 
-        // $data["rs_data"] = $this->M_informasi->get_all();
+        $data["rs_data"] = $this->M_satuan->get_all();
         // $get_last_update = $this->M_informasi->get_all();
         // if(!empty($get_last_update)){
 		// 	$data['last_update'] = $get_last_update[0]['tanggal'];
@@ -24,7 +24,7 @@ class Satuan extends CI_Controller {
         // echo"<pre>";print_r($data);die();
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar');
-		$this->load->view('master/satuan/index');
+		$this->load->view('master/satuan/index',$data);
 		$this->load->view('template/footer');
         
     }
@@ -50,90 +50,68 @@ class Satuan extends CI_Controller {
 			//set params
 			$params = array(
 				'nama_satuan' 	=> $nama_satuan,
-				'create_date'   => date('Y-m-d')
+				'create_by'		=> $this->session->userdata("id_user"),
+				'create_date'   => date('Y-m-d H:i:s')
 			);
-			print_r($paams);die;
+			// print_r($params);die;
 		
-        $this->M_satuan->insert($params);
+        $this->M_satuan->insert('mst_satuan',$params);
 		
 		$this->notif_msg('master/satuan/add', 'Sukses', 'Data berhasil ditambahkan');
 		}
 	}
 	
-	// public function delete($kode_info)
-	// {
-    //     // load view
-	// 	$this->load->view('admin/dashboard/head');
-	// 	$this->load->view('admin/dashboard/sidebar');
-    //     $data["rs_delete"] = $this->M_informasi->get_info_byid($kode_info);
-	// 	$this->load->view('admin/informasi/delete', $data);
-	// 	$this->load->view('admin/dashboard/footer');
-        
-	// }
-	
-	// public function delete_process()
-	// {
-	// 	$kode_info = $this->input->post('kode_info', true);
-	// 	$this->_deleteImage($kode_info);
-    //     $this->M_informasi->delete_informasi($kode_info);
+	public function delete_process()
+	{
+		$id_satuan = $this->input->post('id_satuan', true);
+		// var_dump($id_satuan);die;
+		$where = array(
+			'id_satuan'	=> $id_satuan
+		);
+		$this->M_satuan->delete('mst_satuan',$where);
 		
-	// 	$this->notif_msg('admin/informasi/view', 'Sukses', 'Data berhasil dihapus');
+		$this->notif_msg('master/satuan', 'Sukses', 'Data berhasil dihapus');
 		
-    // }
+    }
 	
-	// public function edit($kode_info)
-	// {
-	// 	//delete session notif
-	// 	$this->session->unset_userdata('sess_notif');
-    //     // load view
-	// 	$this->load->view('admin/dashboard/head');
-	// 	$this->load->view('admin/dashboard/sidebar');
-    //     $data["rs_edit"] = $this->M_informasi->get_info_byid($kode_info);
-	// 	$this->load->view('admin/informasi/edit', $data);
-	// 	$this->load->view('admin/dashboard/footer');
+	public function edit($id)
+	{
+		//delete session notif
+		// $this->session->unset_userdata('sess_notif');
+		//load data
+		$data["rs_edit"] = $this->M_satuan->get_data_byid($id);
+		// load view
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar');
+		$this->load->view('master/satuan/edit', $data);
+		$this->load->view('template/footer');
         
-	// }
+	}
 
-	// public function edit_process()
-	// {
-	// 	$kode_info = $this->input->post('kode_info', true);
-	// 	$judul = $this->input->post('judul', true);
-    //     $isi = $this->input->post('isi', true);
-        
+	public function edit_process()
+	{
+		$id_satuan = $this->input->post('id_satuan', true);
+		$nama_satuan = $this->input->post('nama_satuan', true);
 		
-	// 	if(!empty($_FILES["gambar"]["name"])){
-	// 		//delete old image
-	// 		$this->_deleteImage($kode_info);
-	// 		//insert new image
-	// 		$this->_uploadImage($kode_info);
-	// 		$fileExt = pathinfo($_FILES["gambar"]["name"], PATHINFO_EXTENSION);
-	// 		$gambar = $kode_info.'.'.$fileExt;
-	// 		//set params
-	// 		$params = array(
-	// 			'judul' => $judul,
-	// 			'gambar'	=> $gambar,
-	// 			'isi'   => $isi,
-	// 			'tanggal'   => date('Y-m-d'),
-	// 			'kode_info' => $kode_info
-	// 		);
-	// 		$this->M_informasi->update_informasi_image($params);
-	// 	}
-	// 	else{
-	// 		//set params
-	// 		$params = array(
-	// 			'judul' 	=> $judul,
-	// 			'isi'   	=> $isi,
-	// 			'tanggal'   => date('Y-m-d'),
-	// 			'kode_info' => $kode_info
-	// 		);
-	// 		$this->M_informasi->update_informasi($params);
-	// 	}
-		
-        
-		
-	// 	$this->notif_msg('admin/informasi/view', 'Sukses', 'Data berhasil diedit');
-        
-	// }
+		$this->form_validation->set_rules('nama_satuan','Nama Satuan','required');
+
+		if($this->form_validation->run() == false){
+			redirect('master/satuan/edit'.$id_satuan);
+		}else{
+			//set params
+			$params = array(
+				'nama_satuan' 	=> $nama_satuan,
+				'mdb'			=> $this->session->userdata("id_user"),
+				'mdd'   		=> date('Y-m-d H:i:s')
+			);
+			$where = array(
+				'id_satuan'	=> $id_satuan
+			);
+			$this->M_satuan->update('mst_satuan',$params,$where);
+			
+			$this->notif_msg('master/satuan', 'Sukses', 'Data berhasil diedit');
+		}
+	}
 
 	
 }
