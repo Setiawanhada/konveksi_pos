@@ -39,6 +39,17 @@ class Jenis extends CI_Controller {
 		$this->load->view('template/sidebar');
 		$this->load->view('master/jenis/add', $data);
 		$this->load->view('template/footer');
+	}
+	
+	public function detail($id)
+	{
+        //load data
+        $data["rs_data"] = $this->jenis->get_data_byid($id);
+        // load view
+		$this->load->view('template/header');
+		$this->load->view('template/sidebar');
+		$this->load->view('master/jenis/detail', $data);
+		$this->load->view('template/footer');
     }
 	
     public function add_process()
@@ -58,7 +69,8 @@ class Jenis extends CI_Controller {
 				'harga_jual' 	=> $harga_jual,
 				'create_by'		=> $this->session->userdata("id_user"),
 				'create_date'   => date('Y-m-d H:i:s')
-            );
+			);
+			// $params_detail = array()
             $this->M_jenis->insert('mst_jenis',$params);
 
             //get id terakhir
@@ -67,14 +79,17 @@ class Jenis extends CI_Controller {
 
             $id_bahan = $this->input->post('id_bahan', true);
             $dibutuhkan = $this->input->post('dibutuhkan', true);
-            $params_detail = array(
-                'id_jenis'      => $id_jenis['id_jenis'],
-                'id_bahan'      => $id_bahan,
-                'dibutuhkan'    => $dibutuhkan,
-                'create_by'		=> $this->session->userdata("id_user"),
-				'create_date'   => date('Y-m-d H:i:s')
-            );
-            $this->M_jenis->insert('mst_detail_jenis',$params_detail);
+			for ($i=0; $i < count($id_bahan) ; $i++) { 
+				$params_detail = array(
+					'id_jenis'      => $id_jenis['id_jenis'],
+					'id_bahan'      => $id_bahan[$i],
+					'dibutuhkan'    => $dibutuhkan[$i],
+					'create_by'		=> $this->session->userdata("id_user"),
+					'create_date'   => date('Y-m-d H:i:s')
+				);
+				$this->M_jenis->insert('mst_detail_jenis',$params_detail);
+			}
+			
 			// print_r($params);die;
 		
 		
