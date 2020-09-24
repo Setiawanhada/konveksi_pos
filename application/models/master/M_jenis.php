@@ -49,4 +49,20 @@ class M_jenis extends CI_Model {
         }
     }
 
+    public function get_data_detail($id){
+        $sql = "SELECT a.*,b.nama_bahan
+        FROM mst_detail_jenis a 
+        JOIN mst_bahan b ON a.id_bahan = b.id_bahan
+        WHERE a.id_jenis = ?
+        ";
+        //execute query
+        $query = $this->db->query($sql,$id);
+        if ($query->num_rows() > 0) {
+        $result = $query->result_array();
+        $query->free_result();
+        return $result;
+        }else{
+        return array();
+        }
+    }
 }

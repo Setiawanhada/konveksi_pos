@@ -11,48 +11,71 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
 <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Tambah Data</h6>
+    <h6 class="m-0 font-weight-bold text-primary">Edit Data</h6>
 </div>
 <div class="card-body">
     <div class="">
-        <form action="<?=site_url('master/jenis/add_process')?>" method="post">
+        <form action="<?=site_url('master/jenis/edit_process')?>" method="post">
             <div class="form-group row">
                 <label for="staticEmail" class="col-sm-2 col-form-label">Nama jenis</label>
                 <div class="col-sm-10">
-                <input type="text" class="form-control" name="nama_jenis">
+                <input type="text" class="form-control" name="nama_jenis" value="<?= $rs_data['nama_jenis']?>">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="staticEmail" class="col-sm-2 col-form-label">Harga Jual</label>
                 <div class="col-sm-10">
-                <input type="text" class="form-control" name="harga_jual">
+                <input type="text" class="form-control" name="harga_jual" value="<?= $rs_data['harga_jual']?>">
                 </div>
             </div>
             <hr>
             <label for=""><b>Detail Jenis</b></label>
+            <?php foreach ($rs_detail as $detail): ?>
             <div class="form-group row">
                 <label for="staticEmail" class="col-sm-2 col-form-label">Bahan</label>
                 <div class="col-sm-10">
-                <select class="form-control select2-show-search" name="id_bahan"
-                    data-placeholder="-- Pilih Jenis Jabatan --">
-                    <option value="" disabled selected>-- Pilih Bahan --</option>
-                    <?php foreach ($rs_bahan as $bahan): ?>
-                    <option value="<?php echo $bahan['id_bahan']?>"><?php echo $bahan['nama_bahan']?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
+                <input type="text" class="form-control" name="id_bahan" value="<?= $detail['id_bahan']?>" hidden>
+                <input type="text" class="form-control" name="nama_bahan" value="<?= $detail['nama_bahan']?>">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="staticEmail" class="col-sm-2 col-form-label">Jml Dibutuhkan</label>
                 <div class="col-sm-10">
-                <input type="text" class="form-control" name="dibutuhkan">
+                <input type="text" class="form-control" name="dibutuhkan" value="<?= $detail['dibutuhkan']?>">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="staticEmail" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                <a href="" data-toggle="modal" data-target="#detail" class="btn btn-sm btn-info">detail</a>
+                <a data-toggle="modal" data-target="#edit<?=$detail['id_detail_jenis']?>" href="" class="btn btn-sm btn-warning">Edit</a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <div class="form_bahan">
+                <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Bahan</label>
+                    <div class="col-sm-10">
+                    <select class="form-control select2-show-search" name="id_bahan[]"
+                        data-placeholder="-- Pilih Jenis Jabatan --">
+                        <option value="" disabled selected>-- Pilih Bahan --</option>
+                        <?php foreach ($rs_bahan as $bahan): ?>
+                        <option value="<?php echo $bahan['id_bahan']?>"><?php echo $bahan['nama_bahan']?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                    </div>
+                </div>
+                <div class="form-group row form_dibutuhkan">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Jml Dibutuhkan</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" name="dibutuhkan[]">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="staticEmail" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                <a onclick="add_bahan()" class="btn btn-sm btn-info">+ Tambah</a>
                 </div>
             </div>
             <div class="row d-flex justify-content-center">
@@ -62,38 +85,71 @@
                 </div>
         </form>
     </div>
-    <!-- modal -->
-    <div class="modal fade" id="detail" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<form action="<?= site_url('master/jenis/add_process')?>" method="post">
-					<div class="modal-header">
-						<h5 class="modal-title">Tambah Data Detail</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-3">
-								<label for="">Nama jenis</label>
-							</div>
-							<div class="col-md-8">
-								: <input type="text">
-                            </div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Simpan</button>
-					</div>
-				</form>
-			</div>
-		</div>
+    <!-- modal start -->
+    <?php foreach ($rs_detail as $detail): ?>
+	<div class="modal fade" id="edit<?=$detail['id_detail_jenis']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Data Detail<?=$detail['id_detail_jenis']?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                   
+                    <div class="modal-body">
+                        <label><b> Data Jenis :</b></label>
+                        
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
     </div>
-    <!-- end modal -->
+    <!-- modal end -->
 </div>
 </div>
 
 </div>
 <!-- /.container-fluid -->
+<script>
+    function add_bahan()
+        {
+            var html = '';
+
+            html += '<div class="form_bahan_tambah">';
+            html += '<div class="form-group row">';
+            html += '<label for="staticEmail" class="col-sm-2 col-form-label">Bahan</label>';
+            html += '<div class="col-sm-10">';
+            html += '<select class="form-control select2-show-search" name="id_bahan[]">';
+            html += '<option value="" disabled selected>-- Pilih Bahan --</option>';
+            html += '<?php foreach ($rs_bahan as $bahan): ?>';
+            html += '<option value="<?php echo $bahan['id_bahan']?>"><?php echo $bahan['nama_bahan']?>';
+            html += '</option>';
+            html += '<?php endforeach; ?>';
+            html += '</select>';
+            html += '</div>';
+            html += ' </div>';
+            html += '<div class="form-group row form_dibutuhkan">';
+            html += '<label for="staticEmail" class="col-sm-2 col-form-label">Jml Dibutuhkan</label>';
+            html += '<div class="col-sm-10">';
+            html += '<input type="text" class="form-control" name="dibutuhkan[]">';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="form-group row">';
+            html += '<label for="staticEmail" class="col-sm-2 col-form-label"></label>';
+            html += '<div class="col-sm-10">';
+            html += '<a onclick="del_form(this)" class="btn btn-sm btn-info">- Kurangi</a>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            $('.form_bahan').append(html);
+        }
+
+    function del_form(id)
+        {
+            $(id).closest('.form_bahan_tambah').remove()
+            // id.closest('div').remove();
+        }
+</script>

@@ -41,16 +41,6 @@ class Jenis extends CI_Controller {
 		$this->load->view('template/footer');
 	}
 	
-	public function detail($id)
-	{
-        //load data
-        $data["rs_data"] = $this->jenis->get_data_byid($id);
-        // load view
-		$this->load->view('template/header');
-		$this->load->view('template/sidebar');
-		$this->load->view('master/jenis/detail', $data);
-		$this->load->view('template/footer');
-    }
 	
     public function add_process()
 	{
@@ -115,7 +105,11 @@ class Jenis extends CI_Controller {
 		//delete session notif
 		// $this->session->unset_userdata('sess_notif');
 		//load data
-		$data["rs_edit"] = $this->M_jenis->get_data_byid($id);
+		$data["rs_data"] = $this->M_jenis->get_data_byid($id);
+		$data["rs_detail"] = $this->M_jenis->get_data_detail($id);
+        $data["rs_bahan"] = $this->M_bahan->get_all();
+
+		// echo"<pre>";print_r($data);die;
 		// load view
 		$this->load->view('template/header');
 		$this->load->view('template/sidebar');
